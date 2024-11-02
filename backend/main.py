@@ -1,8 +1,10 @@
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Depends
+from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import fitz
 from langchain_google_genai import ChatGoogleGenerativeAI
+from models.models import FileUpload, SessionLocal
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-pro",
@@ -14,6 +16,13 @@ llm = ChatGoogleGenerativeAI(
 
 app = FastAPI()
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
@@ -22,10 +31,8 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
-
-
 @app.post("/upload")
-async def receive_file(file: UploadFile):
+async def receive_file(file: UploadFile, db: Session = Depends(get_db)):
     file_path = f"temp_{file.filename}"
     with open(file_path, "wb") as f:
         f.write(await file.read())
@@ -36,6 +43,11 @@ async def receive_file(file: UploadFile):
         page = document.load_page(page_num)
         text_content += page.get_text()
     document.close()
+
+    new_upload = FileUpload(filename=file.filename)
+    db.add(new_upload)
+    db.commit()
+    db.refresh(new_upload)
 
     return {"text_content": text_content}  
 
