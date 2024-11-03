@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, DateTime
+from sqlalchemy import create_engine, Column, String, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import datetime
@@ -10,9 +10,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class FileUpload(Base):
     __tablename__ = "file_uploads"
-
-    filename = Column(String, primary_key=True, index=True)
-    upload_date = Column(DateTime, default=datetime.datetime)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    filename = Column(String, index=True)
+    upload_date = Column(DateTime, default=datetime.datetime.utcnow)
 
 # Create tables
 Base.metadata.create_all(bind=engine)

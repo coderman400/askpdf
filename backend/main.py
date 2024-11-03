@@ -7,11 +7,11 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from models.models import FileUpload, SessionLocal
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro",
+    model="gemini-1.5-flash-latest",
     temperature=0,
     max_tokens=None,  
     timeout=None,
-    max_retries=2,
+    max_retries=5,
 )
 
 app = FastAPI()
@@ -30,6 +30,16 @@ app.add_middleware(
     allow_methods=["*"],  
     allow_headers=["*"],  
 )
+@app.get("/uploads")
+async def read_uploads(db: Session = Depends(get_db)):
+    uploads = db.query(FileUpload).all()  
+    return uploads  
+
+@app.get("/nuke")
+async def nuke_db(db: Session = Depends(get_db)):
+    db.query(FileUpload).delete()
+    db.commit() 
+    return {"message": "All records have been deleted."}
 
 @app.post("/upload")
 async def receive_file(file: UploadFile, db: Session = Depends(get_db)):
@@ -54,7 +64,7 @@ async def receive_file(file: UploadFile, db: Session = Depends(get_db)):
 @app.post("/ask")
 async def answer_question(prompt: str = Form(...), text: str = Form(...)):
     messages = [
-        ("system", "You are a helpful assistant happy to answer questions"),
+        ("system", "You will receive a prompt from the human and a PDF text content as assistance. You must answer all queries with the text input as the reference"),
         ("human", prompt),
         ("assistant", text)
     ]

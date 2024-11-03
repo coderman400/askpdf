@@ -51,6 +51,31 @@ const Upload = () => {
             console.log(error)
         }
     }
+    const handleRetrieve = async()=> {
+        try{
+            const response = await fetch(`${apiAddress}/uploads`,{
+                method:'GET'
+            })
+            if(response.ok){
+                let data = await response.json()
+                console.log(data)
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+    const handleNuke = async()=>{
+        try{
+            const response = await fetch(`${apiAddress}/nuke`,{
+                method:'GET'
+            })
+            if(response.ok){
+                console.log('success')
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
 
 
   return (
@@ -60,6 +85,8 @@ const Upload = () => {
         <button type='submit' onClick={handleUpload}>SUBMIT</button>
         <input type='text' className='border-2 border-black m-4' onChange={changePrompt}></input>
         <button type='submit' onClick={handleAsk}>ASK</button>
+        <button className='m-4' onClick={handleRetrieve}>Retrieve</button>
+        <button className='m-4' onClick={handleNuke}>Nuke</button>
     </>
 
   )
