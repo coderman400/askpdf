@@ -1,5 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
+import ai_planet_img from '../assets/ai_planet.png'
+import {FaPaperPlane} from 'react-icons/fa'
+import user_img from '../assets/user_img.png'
+
 const apiAddress = 'http://127.0.0.1:8000'
 const Upload = () => {
     const [pdf, setPdf] = useState(null)
@@ -80,13 +84,35 @@ const Upload = () => {
 
   return (
     <>
-        <div className='font-bold text-5xl m-4'>Upload</div>
+        {/* <div className='font-bold text-5xl m-4'>Upload</div>
         <input type='file' onChange={setFile}></input>
         <button type='submit' onClick={handleUpload}>SUBMIT</button>
         <input type='text' className='border-2 border-black m-4' onChange={changePrompt}></input>
         <button type='submit' onClick={handleAsk}>ASK</button>
         <button className='m-4' onClick={handleRetrieve}>Retrieve</button>
-        <button className='m-4' onClick={handleNuke}>Nuke</button>
+        <button className='m-4' onClick={handleNuke}>Nuke</button> */}
+
+        <div className='flex align-center justify-center h-screen w-full'>
+            <div className='w-4/5 mt-10 overflow-y-auto rounded-2xl h-3/4 relative flex flex-col justify-left '>
+                <div className='mx-6 my-4'>
+                    <p className='inline-flex items-center'> <img src={ai_planet_img} className='h-14 w-14 mr-5'/>MEOWMEOWMEOWMOEW</p>
+                </div>
+                <div className='mx-6 my-4'>
+                    <p className='inline-flex items-center'><img src={user_img} className='h-12 w-12 mr-7'/> MEOWMEOWMEOWMOEW</p>
+                </div>
+            </div>
+            <div className='fixed bottom-16 w-4/6 flex items-center p-1 rounded-md drop-shadow-lg bg-white'>
+                    <input
+                        type='text'
+                        className='flex-grow p-4 rounded-l-md border-0 focus:outline-none'
+                        placeholder='Send a message..'
+                    />
+                    <button className='p-4 bg-white text-white rounded-r-md hover:bg-gray-300 duration-200'>
+                        <FaPaperPlane color='gray' size={20}/>
+                    </button>
+                </div>
+
+        </div>
     </>
 
   )
