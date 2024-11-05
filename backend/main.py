@@ -33,6 +33,7 @@ def get_db():
 
 @app.post("/upload")
 async def receive_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    print(file)
     if not file:
         raise HTTPException(status_code=400, detail="File not received")
     # Save file temporarily
