@@ -3,7 +3,7 @@ import ai_planet_img from '../assets/ai_planet.png';
 import { FaPaperPlane } from 'react-icons/fa';
 import user_img from '../assets/user_img.png';
 
-const apiAddress = 'http://127.0.0.1:8000';
+const apiAddress = 'https://askpdf-nf1g.onrender.com';
 
 const Chat = ({ prompt, setPrompt, Id }) => {
     //store array of messages to render as chat

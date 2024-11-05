@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from 'react';
-const apiAddress = 'http://127.0.0.1:8000'
+const apiAddress = 'https://askpdf-nf1g.onrender.com'
 
 const Navbar = ({setPdf, setId}) => {
   const [fileName, setFileName] = useState('')
@@ -37,7 +37,7 @@ const Navbar = ({setPdf, setId}) => {
           })
           //update conversation ID in App and set filename.
           if(response.ok){
-              const data = await// Add the key down event handler response.json()
+              const data = await response.json()
               console.log(data.text_content)
               setId(data.conversation_id)
               setFileName(pdf.name)
