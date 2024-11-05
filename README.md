@@ -11,6 +11,10 @@ Uses NLP and message history storage, prompting human-like conversation with sea
 - **Database**: SQLite
 - **ORM**: SQLAlchemy
 
+## Deployment
+- **Vercel** : Frontend at https://askpdf-eight.vercel.app/
+- **Render** : Backend at https://askpdf-nf1g.onrender.com
+
 ## Installation
 
 ### Frontend Setup
