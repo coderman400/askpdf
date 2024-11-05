@@ -1,6 +1,6 @@
 
 import './App.css'
-import Upload from './components/Upload'
+import Chat from './components/Chat'
 import Navbar from './components/Navbar'
 import { useState } from 'react'
 function App() {
@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <Navbar pdf={pdf} setPdf={setPdf} setId={setId} />
-      <Upload prompt={prompt} setPrompt={setPrompt} Id={Id} />
+      <Chat prompt={prompt} setPrompt={setPrompt} Id={Id} />
     </>
   )
 }
