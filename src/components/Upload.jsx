@@ -5,8 +5,8 @@ import user_img from '../assets/user_img.png';
 
 const apiAddress = 'http://127.0.0.1:8000';
 
-const Upload = ({ text, prompt, setPrompt }) => {
-    const [messages, setMessages] = useState([]); // Stores chat history
+const Upload = ({ prompt, setPrompt, Id }) => {
+    const [messages, setMessages] = useState([]); 
 
     const changePrompt = (e) => {
         setPrompt(e.target.value);
@@ -15,15 +15,11 @@ const Upload = ({ text, prompt, setPrompt }) => {
     const handleAsk = async () => {
         try {
             if (prompt) {
-                // Add the prompt to the chat history
                 setMessages([...messages, { type: 'prompt', content: prompt }]);
 
-                // Prepare the form data
                 const form = new FormData();
                 form.append('prompt', prompt);
-                form.append('text', text);
-
-                // Send prompt to backend
+                form.append('conversation_id', Id);
                 const response = await fetch(`${apiAddress}/ask`, {
                     method: 'POST',
                     body: form
@@ -31,12 +27,11 @@ const Upload = ({ text, prompt, setPrompt }) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Add the response to the chat history
                     setMessages(prevMessages => [
                         ...prevMessages,
                         { type: 'response', content: data.result }
                     ]);
-                    setPrompt(''); // Clear input field
+                    setPrompt(''); 
                 }
             } else {
                 alert("PROMPT CANNOT BE EMPTY");
@@ -50,13 +45,14 @@ const Upload = ({ text, prompt, setPrompt }) => {
         <div className='flex align-center justify-center h-screen w-full'>
             <div className='w-4/5 mt-10 overflow-y-auto rounded-2xl h-3/4 relative flex flex-col justify-left'>
                 {messages.map((msg, index) => (
-                    <div key={index} className={`mx-6 my-4 ${msg.type === 'prompt' ? 'text-right' : 'text-left'}`}>
+                    <div key={index} className={`mx-6 my-4 text-left`}>
                         <p className='inline-flex items-center'>
+                            {msg.type === 'prompt' && <img src={user_img} className='h-10 w-10 ml-4' alt="User Avatar" />}
                             {msg.type === 'response' && <img src={ai_planet_img} className='h-10 w-10 mr-4' alt="AI Avatar" />}
-                            <span className={`p-3 rounded-lg ${msg.type === 'prompt' ? 'bg-gray-200' : 'bg-blue-200'}`}>
+                            <span className={`p-3 rounded-lg ${msg.type === 'prompt' ? 'bg-gray-100' : 'bg-gray-200'}`}>
                                 {msg.content}
                             </span>
-                            {msg.type === 'prompt' && <img src={user_img} className='h-10 w-10 ml-4' alt="User Avatar" />}
+                            
                         </p>
                     </div>
                 ))}

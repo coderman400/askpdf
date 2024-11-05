@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 const apiAddress = 'http://127.0.0.1:8000'
-const Navbar = ({pdf, setPdf, setText}) => {
+const Navbar = ({pdf, setPdf, setId}) => {
   const [fileName, setFileName] = useState('')
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
@@ -23,7 +23,7 @@ const Navbar = ({pdf, setPdf, setText}) => {
         if(response.ok){
             const data = await response.json()
             console.log(data.text_content)
-            setText(data.text_content)
+            setId(data.conversation_id)
             setFileName(pdf.name)
         }
     }catch(error){
