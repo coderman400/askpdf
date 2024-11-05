@@ -1,13 +1,35 @@
 import React, { useState } from 'react';
-
-const Navbar = () => {
-  const [fileName, setFileName] = useState('');
-
+const apiAddress = 'http://127.0.0.1:8000'
+const Navbar = ({pdf, setPdf, setText}) => {
+  const [fileName, setFileName] = useState('')
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
-      setFileName(event.target.files[0].name);
+      setPdf(event.target.files[0]);
+      handleUpload()
     }
+    
   };
+  const handleUpload = async ()=> {
+    try{
+        const form = new FormData()
+        if(pdf){
+            form.append('file', pdf)
+            setFileName('Loading...')
+        }
+        const response = await fetch(`${apiAddress}/upload`, {
+            method:'POST',
+            body:form
+        })
+        if(response.ok){
+            const data = await response.json()
+            console.log(data.text_content)
+            setText(data.text_content)
+            setFileName(pdf.name)
+        }
+    }catch(error){
+        console.log(error)
+    }
+}
 
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-100 shadow-md">

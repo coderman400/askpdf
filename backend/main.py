@@ -42,7 +42,7 @@ async def nuke_db(db: Session = Depends(get_db)):
     return {"message": "All records have been deleted."}
 
 @app.post("/upload")
-async def receive_file(file: UploadFile, db: Session = Depends(get_db)):
+async def receive_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
     file_path = f"temp_{file.filename}"
     with open(file_path, "wb") as f:
         f.write(await file.read())
