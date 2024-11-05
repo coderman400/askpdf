@@ -2,38 +2,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import ai_planet_img from '../assets/ai_planet.png';
 import { FaPaperPlane } from 'react-icons/fa';
 import user_img from '../assets/user_img.png';
+import ReactMarkdown from 'react-markdown';
 
 const apiAddress = 'https://askpdf-nf1g.onrender.com';
 
 const Chat = ({ prompt, setPrompt, Id }) => {
-    //store array of messages to render as chat
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null); 
 
-    //set prompts to send to backend
     const changePrompt = (e) => {
         setPrompt(e.target.value);
     };
 
-    //sending prompt to backend and getting AI response
-    const handleAsk = async () => {
+    const handleAsk = async (currentPrompt) => {
         try {
-            if (prompt) {
-                //update message history
-                setMessages(prevMessages => [...prevMessages, { type: 'prompt', content: prompt }]);
-
+            if (currentPrompt) {
+                setMessages(prevMessages => [...prevMessages, { type: 'prompt', content: currentPrompt }]);
                 const form = new FormData();
-                form.append('prompt', prompt);
+                form.append('prompt', currentPrompt);
                 form.append('conversation_id', Id);
-
-                //send convo id and prompt to backend using POST
 
                 const response = await fetch(`${apiAddress}/ask`, {
                     method: 'POST',
                     body: form
                 });
 
-                //if 200, then update message history with the response
                 if (response.ok) {
                     const data = await response.json();
                     setMessages(prevMessages => [
@@ -50,15 +43,15 @@ const Chat = ({ prompt, setPrompt, Id }) => {
         }
     };
 
-    //sending prompt if enter is pressed
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            handleAsk(); 
+            let currentPrompt = prompt
+            setPrompt('')
+            handleAsk(currentPrompt); 
         }
     };
 
-    //scrolling to last message whenever new message is added
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -67,22 +60,19 @@ const Chat = ({ prompt, setPrompt, Id }) => {
 
     return (
         <div className='flex align-center justify-center h-screen w-full'>
-            <div className='w-4/5 mt-20 overflow-y-auto rounded-2xl h-3/4 relative flex flex-col justify-left'>
-
-            {/* messages rendering according to type (prompt or response) */}
+            <div className='w-4/5 mt-20 overflow-y-auto rounded-2xl h-3/4 relative flex flex-col justify-left pb-20'> {/* Added padding bottom */}
                 {messages.map((msg, index) => (
-                    <div key={index} className={`mx-6 my-4 ${msg.type === 'response'? `text-left`: `text-right`}`}>
+                    <div key={index} className={`mx-6 my-4 ${msg.type === 'response' ? `text-left` : `text-right`}`}>
                         <p className='inline-flex items-center'>
                             {msg.type === 'response' && <img src={ai_planet_img} className='h-10 w-10 mr-4' alt="AI Avatar" />}
                             <span className={`p-3 rounded-lg ${msg.type === 'prompt' ? 'bg-gray-100' : 'bg-gray-200'}`}>
-                                {msg.content}
+                                {/* Render markdown content */}
+                                <ReactMarkdown>{msg.content}</ReactMarkdown>
                             </span>
                             {msg.type === 'prompt' && <img src={user_img} className='h-10 w-10 ml-4' alt="User Avatar" />}
                         </p>
                     </div>
                 ))}
-
-                {/* Dummy element to scroll to */}
                 <div ref={messagesEndRef} />
             </div>
             <div className='fixed bottom-16 w-4/6 flex items-center p-1 rounded-md drop-shadow-lg bg-white'>
