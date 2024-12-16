@@ -65,7 +65,7 @@ const Chat = ({ prompt, setPrompt, Id }) => {
                     <div key={index} className={`mx-6 my-4 ${msg.type === 'response' ? `text-left` : `text-right`}`}>
                         <p className='inline-flex items-center'>
                             {msg.type === 'response' && <img src={ai_planet_img} className='h-10 w-10 mr-4' alt="AI Avatar" />}
-                            <span className={`p-3 rounded-lg ${msg.type === 'prompt' ? 'bg-gray-100' : 'bg-gray-200'}`}>
+                            <span className={`p-3 rounded-lg w-3/4 ${msg.type === 'prompt' ? 'bg-gray-100' : 'bg-gray-200'}`}>
                                 {/* Render markdown content */}
                                 <ReactMarkdown>{msg.content}</ReactMarkdown>
                             </span>
