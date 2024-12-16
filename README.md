@@ -3,6 +3,8 @@ Fullstack application to upload PDFs and ask questions to it in a friendly and i
 Can easily summarise, find specific details, prompt further information with the PDF's content as a reference.
 Uses NLP and message history storage, prompting human-like conversation with seamless follow-ups.
 
+**DEMO VIDEO** : https://youtu.be/4MrXvOyYTzk
+
 ## Technology Used
 - **React.js + Vite** : Frontend framework for interface
 - **Tailwind CSS** : CSS framework for easier and efficient styling
@@ -10,6 +12,10 @@ Uses NLP and message history storage, prompting human-like conversation with sea
 - **LangChain**: Integrating Gemini API with backend
 - **Database**: SQLite
 - **ORM**: SQLAlchemy
+
+## Deployment
+- **Vercel** : Frontend at https://askpdf-eight.vercel.app/
+- **Render** : Backend at https://askpdf-nf1g.onrender.com
 
 ## Installation
 
